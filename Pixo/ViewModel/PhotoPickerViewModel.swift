@@ -30,9 +30,9 @@ class PhotoPickerViewModel{
     
     func fetchAllPhotos(){
         let options = PHFetchOptions()
-        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         
-        self.allPhoto = PHAsset.fetchAssets(with: nil)
+        self.allPhoto = PHAsset.fetchAssets(with: options)
         
         guard let allPhoto = allPhoto else{
             return
