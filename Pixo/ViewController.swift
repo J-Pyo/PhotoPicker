@@ -14,8 +14,6 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        popupPhotoPicker.collectionView.delegate = self
-//        popupPhotoPicker.collectionView.dataSource = self
     
     }
     
@@ -25,16 +23,4 @@ class ViewController: UIViewController {
         
     }
 }
-
-//extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource{
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return 0
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        <#code#>
-//    }
-//
-//
-//}
 
