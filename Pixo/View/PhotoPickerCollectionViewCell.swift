@@ -13,7 +13,6 @@ class PhotoPickerCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
     }
     
     required init?(coder: NSCoder) {
@@ -25,6 +24,8 @@ class PhotoPickerCollectionViewCell: UICollectionViewCell {
         }
         imageView.image = image
         imageView.frame.size = size
+        imageView.layer.cornerRadius = 10
+        imageView.layer.masksToBounds = true
         
         self.addSubview(imageView)
     }
