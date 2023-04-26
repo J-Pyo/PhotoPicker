@@ -14,13 +14,19 @@ class PhotoPickerCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.addSubview(imageView)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
+    func addImage(image: UIImage?, size: CGSize){
+        guard let image = image else{
+            return
+        }
+        imageView.image = image
+        imageView.frame.size = size
+        
+        self.addSubview(imageView)
+    }
     
 }
