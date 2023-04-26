@@ -6,8 +6,17 @@
 //
 
 import UIKit
+import Photos
 
-private let reuseIdentifier = "Cell"
+protocol PhotoPickerViewControllerDelegate: AnyObject{
+    func didUpdateState(to state: PhotoPickerViewControllerState)
+}
+enum PhotoPickerViewControllerState{
+    //선택된 Asset 가져오기
+    case getAsset
+    //Error
+    case error(reason: String)
+}
 
 class PhotoPickerCollectionViewController: UICollectionViewController {
     
@@ -22,6 +31,15 @@ class PhotoPickerCollectionViewController: UICollectionViewController {
     let deviceScreenWidth = UIScreen.main.bounds.width
     //Cell 사이 간격
     let cellSpacing = 10.0
+    //선택된 Asset
+    var selectedAsset: PHAsset?{
+        didSet{
+            dismiss(animated: true) {
+                self.delegate?.didUpdateState(to: .getAsset)
+            }
+        }
+    }
+    weak var delegate: PhotoPickerViewControllerDelegate?
     
     init() {
         super.init(collectionViewLayout: layout)
@@ -39,14 +57,13 @@ class PhotoPickerCollectionViewController: UICollectionViewController {
         layout.minimumInteritemSpacing = cellSpacing
         //Cell 위아래 최소 간격
         layout.minimumLineSpacing = cellSpacing
-        // Cell 사이즈 = (화면크기 - (여백좌우 + (cell간격 * 간격 갯수))) / 열 갯수
+        
         let cellSize = calcCellSize()
         //CellSize 적용
         layout.itemSize = CGSize(width: cellSize, height: cellSize)
         
         viewModel.delegate = self
         viewModel.fetchAllPhotos()
-        print("cellSize : \(cellSize)")
         // Register cell class
         self.collectionView?.register(PhotoPickerCollectionViewCell.self, forCellWithReuseIdentifier: "PhotoCell")
     }
@@ -86,7 +103,7 @@ class PhotoPickerCollectionViewController: UICollectionViewController {
         let imageManager = viewModel.imageManager
         let asset = viewModel.allPhoto?.object(at: indexPath.row)
         let cellSize = calcCellSize()
-        
+        print(type(of: asset))
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as? PhotoPickerCollectionViewCell,
               let asset = asset else{
             return UICollectionViewCell()
@@ -108,12 +125,15 @@ class PhotoPickerCollectionViewController: UICollectionViewController {
     }
     */
 
-    /*
+    
     // Uncomment this method to specify if the specified item should be selected
     override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        let asset = viewModel.allPhoto?.object(at: indexPath.row)
+        selectedAsset = asset
+        
         return true
     }
-    */
+    
 
     /*
     // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
