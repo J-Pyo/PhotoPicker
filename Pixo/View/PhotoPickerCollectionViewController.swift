@@ -13,6 +13,16 @@ class PhotoPickerCollectionViewController: UICollectionViewController {
     
     let layout = UICollectionViewFlowLayout()
     
+    let viewModel = PhotoPickerViewModel()
+    //열 갯수
+    let columnCount = 3
+    //테두리 여백
+    let sectionInsets = UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 10)
+    //디바이스 화면 크기
+    let deviceScreenWidth = UIScreen.main.bounds.width
+    //Cell 사이 간격
+    let cellSpacing = 10.0
+    
     init() {
         super.init(collectionViewLayout: layout)
     }
@@ -23,25 +33,29 @@ class PhotoPickerCollectionViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //열 갯수
-        let columnCount = 3
-        //테두리 여백
-        let sectionInsets = UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 10)
-        //디바이스 화면 크기
-        let deviceScreenWidth = UIScreen.main.bounds.width
         //테두리 여백 적용
         layout.sectionInset = sectionInsets
         //Cell 양옆 최소 간격
-        layout.minimumInteritemSpacing = 10
+        layout.minimumInteritemSpacing = cellSpacing
         //Cell 위아래 최소 간격
-        layout.minimumLineSpacing = 10
+        layout.minimumLineSpacing = cellSpacing
         // Cell 사이즈 = (화면크기 - (여백좌우 + (cell간격 * 간격 갯수))) / 열 갯수
-        let cellSize = (Int(deviceScreenWidth) - Int(sectionInsets.left + sectionInsets.right + (layout.minimumInteritemSpacing * CGFloat((columnCount - 1))))) / columnCount
-        print(cellSize)
+        let cellSize = calcCellSize()
+        //CellSize 적용
         layout.itemSize = CGSize(width: cellSize, height: cellSize)
         
+        viewModel.delegate = self
+        viewModel.fetchAllPhotos()
+        print("cellSize : \(cellSize)")
         // Register cell class
-        self.collectionView!.register(PhotoPickerCollectionViewCell.self, forCellWithReuseIdentifier: "PhotoCell")
+        self.collectionView?.register(PhotoPickerCollectionViewCell.self, forCellWithReuseIdentifier: "PhotoCell")
+    }
+    
+    // Cell 사이즈 구하기 = (화면크기 - (여백좌우 + (cell간격 * 간격 갯수))) / 열 갯수
+    func calcCellSize() -> Int{
+        let cellSize = (Int(deviceScreenWidth) - Int(self.sectionInsets.left + self.sectionInsets.right + (cellSpacing * CGFloat((columnCount - 1))))) / columnCount
+        
+        return cellSize
     }
 
     /*
@@ -64,15 +78,24 @@ class PhotoPickerCollectionViewController: UICollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return 30
+        return viewModel.allPhoto?.count ?? 0
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as? PhotoPickerCollectionViewCell else{
+        
+        let imageManager = viewModel.imageManager
+        let asset = viewModel.allPhoto?.object(at: indexPath.row)
+        let cellSize = calcCellSize()
+        
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as? PhotoPickerCollectionViewCell,
+              let asset = asset else{
             return UICollectionViewCell()
         }
         
-        cell.backgroundColor = .red
+        imageManager.requestImage(for: asset, targetSize: CGSize(width: cellSize, height: cellSize), contentMode: .aspectFill, options: nil) { image, _ in
+            cell.addImage(image: image, size: CGSize(width: cellSize, height: cellSize))
+        }
+        
         return cell
     }
 
@@ -109,3 +132,15 @@ class PhotoPickerCollectionViewController: UICollectionViewController {
 
 }
 
+extension PhotoPickerCollectionViewController: PhotoPickerViewModelDelegate{
+    func didUpdateState(to state: PhotoPickerViewModelState) {
+        switch state {
+        case .gotPhoto:
+            self.collectionView.reloadData()
+        case .error(let reason):
+            print("error : \(reason)")
+        }
+    }
+    
+    
+}
