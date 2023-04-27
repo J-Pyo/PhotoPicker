@@ -15,6 +15,8 @@ protocol PhotoPickerViewModelDelegate: AnyObject{
 enum PhotoPickerViewModelState{
     //이미지 불러오기 완료
     case gotPhoto
+    //이미지 데이터 가져오기 완료
+    case gotImage
     //Error
     case error(reason: String)
 }
@@ -24,6 +26,11 @@ class PhotoPickerViewModel{
     var allPhoto: PHFetchResult<PHAsset>?{
         didSet{
             self.delegate?.didUpdateState(to: .gotPhoto)
+        }
+    }
+    var pickImage: UIImage?{
+        didSet{
+            self.delegate?.didUpdateState(to: .gotImage)
         }
     }
     let imageManager = PHImageManager()
@@ -40,8 +47,16 @@ class PhotoPickerViewModel{
         print(allPhoto.count)
     }
     
-    func requestImage(){
+    func selectAsset(selectedAsset: PHAsset) {
+        let options = PHImageRequestOptions()
+        options.isSynchronous = false
+        options.deliveryMode = PHImageRequestOptionsDeliveryMode.highQualityFormat
+        options.isNetworkAccessAllowed = true
         
+        imageManager.requestImage(for: selectedAsset, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFill, options: options) { image, _ in
+           
+            self.pickImage = image
+        }
     }
     
 }
