@@ -58,5 +58,4 @@ class PhotoPickerViewModel{
             self.pickImage = image
         }
     }
-    
 }

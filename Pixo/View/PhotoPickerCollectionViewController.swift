@@ -32,9 +32,11 @@ class PhotoPickerCollectionViewController: UICollectionViewController {
     //Cell 사이 간격
     let cellSpacing = 10.0
     //선택된 Asset
-    var selectedAsset: PHAsset?{
+    var selectedImage: UIImage?{
         didSet{
             dismiss(animated: true) {
+                //사진앱 변화 감지를 안해도 되서 등록 해제
+                PHPhotoLibrary.shared().unregisterChangeObserver(self)
                 self.delegate?.didUpdateState(to: .getAsset)
             }
         }
@@ -64,6 +66,8 @@ class PhotoPickerCollectionViewController: UICollectionViewController {
         
         viewModel.delegate = self
         viewModel.fetchAllPhotos()
+        //사진앱의 변화를 감지 하기 위해 등록
+        PHPhotoLibrary.shared().register(self)
         // Register cell class
         self.collectionView?.register(PhotoPickerCollectionViewCell.self, forCellWithReuseIdentifier: "PhotoCell")
     }
@@ -75,16 +79,6 @@ class PhotoPickerCollectionViewController: UICollectionViewController {
         return cellSize
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
-
     // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -94,7 +88,7 @@ class PhotoPickerCollectionViewController: UICollectionViewController {
 
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
+        print(viewModel.allPhoto?.count ?? 0)
         return viewModel.allPhoto?.count ?? 0
     }
 
@@ -103,7 +97,7 @@ class PhotoPickerCollectionViewController: UICollectionViewController {
         let imageManager = viewModel.imageManager
         let asset = viewModel.allPhoto?.object(at: indexPath.row)
         let cellSize = calcCellSize()
-        print(type(of: asset))
+        
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as? PhotoPickerCollectionViewCell,
               let asset = asset else{
             return UICollectionViewCell()
@@ -117,38 +111,17 @@ class PhotoPickerCollectionViewController: UICollectionViewController {
     }
 
     // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
     
-    // Uncomment this method to specify if the specified item should be selected
+    // cell을 선택했을때 로직
     override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
         let asset = viewModel.allPhoto?.object(at: indexPath.row)
-        selectedAsset = asset
-        
+        guard let asset = asset else{
+            return true
+        }
+        viewModel.selectAsset(selectedAsset: asset)
+
         return true
     }
-    
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
-    
-    }
-    */
 
 }
 
@@ -156,11 +129,19 @@ extension PhotoPickerCollectionViewController: PhotoPickerViewModelDelegate{
     func didUpdateState(to state: PhotoPickerViewModelState) {
         switch state {
         case .gotPhoto:
-            self.collectionView.reloadData()
+            //collectionView.reloadData()는 메인 스레드에서만 실행해야 한다.
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
+        case .gotImage:
+            self.selectedImage = viewModel.pickImage
         case .error(let reason):
             print("error : \(reason)")
         }
     }
-    
-    
+}
+extension PhotoPickerCollectionViewController: PHPhotoLibraryChangeObserver{
+    func photoLibraryDidChange(_ changeInstance: PHChange) {
+        viewModel.fetchAllPhotos()
+    }
 }
