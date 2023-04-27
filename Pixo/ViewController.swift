@@ -11,43 +11,50 @@ import Photos
 class ViewController: UIViewController {
 
     let popupPhotoPicker = PhotoPickerCollectionViewController()
+    let svgScrollView = SVGScrollView()
+    
     let screenWidth = UIScreen.main.bounds.size.width
+    
     var imageView = UIImageView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         popupPhotoPicker.delegate = self
+        addImageView()
+        addScrollViewForSVG()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-    
         self.present(popupPhotoPicker, animated: true, completion: nil);
     }
-    func showImage(asset: PHAsset){
-        let imageManager = PHImageManager()
-        let options = PHImageRequestOptions()
-        options.isSynchronous = false
-        options.deliveryMode = PHImageRequestOptionsDeliveryMode.highQualityFormat
-        options.isNetworkAccessAllowed = true
-        
-//        options.progressHandler = {  (progress, error, stop, info) in
-//                print("progress: \(progress)")
-//            }
-//
+    
+    func addImageView(){
         let frame = CGRect(x: (screenWidth / 2) - (screenWidth / 2), y: (UIScreen.main.bounds.height / 2) - (screenWidth / 2), width: screenWidth, height: screenWidth)
         
         self.imageView.frame = frame
-        imageManager.requestImage(for: asset, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFill, options: options) { image, _ in
-            guard let image = image else{
-                print("nill Image")
-                return
-            }
-            self.imageView.image = image
-
-            self.imageView.contentMode = .scaleAspectFit
-        }
+//        self.imageView.image = image
+        self.imageView.contentMode = .scaleAspectFit
         
         self.view.addSubview(imageView)
+    }
+    func showSelectedImage(image: UIImage){
+        self.imageView.image = image
+    }
+    func addScrollViewForSVG(){
+        self.view.addSubview(svgScrollView)
+        
+        svgScrollView.translatesAutoresizingMaskIntoConstraints = false
+        svgScrollView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 10).isActive = true
+        svgScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        svgScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        svgScrollView.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        
+        svgScrollView.stackView.translatesAutoresizingMaskIntoConstraints = false
+        svgScrollView.stackView.topAnchor.constraint(equalTo: svgScrollView.topAnchor).isActive = true
+        svgScrollView.stackView.leadingAnchor.constraint(equalTo: svgScrollView.leadingAnchor).isActive = true
+        svgScrollView.stackView.trailingAnchor.constraint(equalTo: svgScrollView.trailingAnchor).isActive = true
+        svgScrollView.stackView.heightAnchor.constraint(equalTo: svgScrollView.heightAnchor).isActive = true
+        svgScrollView.addSvgImageToStackView()
     }
 }
 extension ViewController: PhotoPickerViewControllerDelegate{
@@ -55,10 +62,10 @@ extension ViewController: PhotoPickerViewControllerDelegate{
         switch state {
         case .getAsset:
             print("get Asset")
-            guard let asset = popupPhotoPicker.selectedAsset else{
+            guard let image = popupPhotoPicker.selectedImage else{
                 return
             }
-            showImage(asset: asset)
+            showSelectedImage(image: image)
         case .error(let reason):
             print("error : \(reason)")
         }
