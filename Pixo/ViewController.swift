@@ -95,7 +95,7 @@ class ViewController: UIViewController {
         svgImage.contentMode = .scaleAspectFit
         
         guard let albumImg = self.imageView.image,
-              let svgImg = self.svgImage.image else{
+              let svgImg = svgImage.image else{
             return
         }
         
