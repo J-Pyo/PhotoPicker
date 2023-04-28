@@ -19,7 +19,10 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         popupPhotoPicker.delegate = self
+        svgScrollView.svgDelegate = self
+        
         addImageView()
         addScrollViewForSVG()
     }
@@ -27,7 +30,7 @@ class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         self.present(popupPhotoPicker, animated: true, completion: nil);
     }
-    
+    //사진앱에 선택되서 표시될 자리에 이미지 뷰 추가
     func addImageView(){
         let frame = CGRect(x: (screenWidth / 2) - (screenWidth / 2), y: (UIScreen.main.bounds.height / 2) - (screenWidth / 2), width: screenWidth, height: screenWidth)
         
@@ -37,9 +40,20 @@ class ViewController: UIViewController {
         
         self.view.addSubview(imageView)
     }
+    //선택된 svg 이미지를 사진앱에서 선택된 이미지 가운데에 올리는 로직
+    func showSelectedSVG(image: UIImage){
+        let svgImage = UIImageView()
+        let imageViewBount = imageView.bounds
+        svgImage.image = image
+        svgImage.frame = CGRect(x: (Int(imageViewBount.width) / 2) - 35, y: (Int(imageViewBount.height) / 2) - 35, width: 70, height: 70)
+        imageView.addSubview(svgImage)
+        
+    }
+    // 사진앱에서 추가될 이미지 입히기
     func showSelectedImage(image: UIImage){
         self.imageView.image = image
     }
+    //scrollview를 추가해줌
     func addScrollViewForSVG(){
         self.view.addSubview(svgScrollView)
         
@@ -54,9 +68,10 @@ class ViewController: UIViewController {
         svgScrollView.stackView.leadingAnchor.constraint(equalTo: svgScrollView.leadingAnchor).isActive = true
         svgScrollView.stackView.trailingAnchor.constraint(equalTo: svgScrollView.trailingAnchor).isActive = true
         svgScrollView.stackView.heightAnchor.constraint(equalTo: svgScrollView.heightAnchor).isActive = true
-        svgScrollView.addSvgImageToStackView()
+        svgScrollView.addSvgImageToStackView(target: self)
     }
 }
+//PhotoPicker에 관한 Delegate
 extension ViewController: PhotoPickerViewControllerDelegate{
     func didUpdateState(to state: PhotoPickerViewControllerState) {
         switch state {
@@ -68,6 +83,17 @@ extension ViewController: PhotoPickerViewControllerDelegate{
             showSelectedImage(image: image)
         case .error(let reason):
             print("error : \(reason)")
+        }
+    }
+}
+//ScrollView에 관한 Delegate
+extension ViewController: SVGScrollViewDelegate{
+    func didUpdateState(to state: SVGScrollViewState) {
+        switch state {
+        case .sendImageInfo:
+            showSelectedSVG(image: svgScrollView.sendedImg!)
+        case .error(let reason):
+            print("error: \(reason)")
         }
     }
 }
