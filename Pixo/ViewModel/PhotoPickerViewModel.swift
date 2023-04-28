@@ -40,17 +40,11 @@ class PhotoPickerViewModel{
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         
         self.allPhoto = PHAsset.fetchAssets(with: options)
-        
-        guard let allPhoto = allPhoto else{
-            return
-        }
-        print(allPhoto.count)
     }
-    
     func selectAsset(selectedAsset: PHAsset) {
         let options = PHImageRequestOptions()
         options.isSynchronous = false
-        options.deliveryMode = PHImageRequestOptionsDeliveryMode.highQualityFormat
+        options.deliveryMode = PHImageRequestOptionsDeliveryMode.opportunistic
         options.isNetworkAccessAllowed = true
         
         imageManager.requestImage(for: selectedAsset, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFill, options: options) { image, _ in
