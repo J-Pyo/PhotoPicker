@@ -9,16 +9,16 @@ import UIKit
 import Photos
 
 class ViewController: UIViewController {
-
+    // PhotoPicker
     let popupPhotoPicker = PhotoPickerCollectionViewController()
+    // 하단 SVG이미지들을 선택할 수 있는 scrollview
     let svgScrollView = SVGScrollView()
+    // '저장하기'버튼을 눌렀을 경우 사용할 로딩뷰
     let loadingIndicator = UIActivityIndicatorView(style: .large)
-    
+    // 화면 넓이
     let screenWidth = UIScreen.main.bounds.size.width
-    
+    // Photopicker로 부터 선택된 이미지가 표시될 imageView
     var imageView = UIImageView()
-    
-    let svgImage = UIImageView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,11 +33,12 @@ class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         self.present(popupPhotoPicker, animated: true, completion: nil);
     }
+    //상단 탑뷰를 더하고 버튼까지 더해준다.
     func addTopView(){
-        var topView = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 80))
+        let topView = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 80))
         topView.backgroundColor = .black
         
-        var saveButton = UIButton(frame: CGRect(x: screenWidth - 100, y: 40, width: 100, height: 40))
+        let saveButton = UIButton(frame: CGRect(x: screenWidth - 100, y: 40, width: 100, height: 40))
         saveButton.setTitle("저장하기", for: .normal)
         saveButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         saveButton.setTitleColor(.white, for: .normal)
@@ -51,29 +52,13 @@ class ViewController: UIViewController {
     @objc func savingImage(){
         loadingIndicator.center = view.center
         view.addSubview(loadingIndicator)
-
+        
         loadingIndicator.startAnimating()
         
-        guard let albumImg = self.imageView.image,
-              let svgImg = self.svgImage.image else{
+        guard let mergedImage = self.imageView.image else{
             return
         }
-        //이미지를 합성할때 메모리 이슈가 있어서 scale 수정
-        UIGraphicsBeginImageContextWithOptions(albumImg.size, false, 1.0)
-
-        albumImg.draw(in: CGRect(origin: CGPoint.zero, size: albumImg.size))
         
-        let centerX = (albumImg.size.width - svgImg.size.width) / 2.0
-        let centerY = (albumImg.size.height - svgImg.size.height) / 2.0
-
-        svgImg.draw(at: CGPoint(x: centerX, y: centerY))
-        
-        let mergedImage = UIGraphicsGetImageFromCurrentImageContext()
-
-        UIGraphicsEndImageContext()
-        guard let mergedImage = mergedImage else{
-            return
-        }
         UIImageWriteToSavedPhotosAlbum(mergedImage, self, #selector(self.didFinishSavingImage(_:didFinishSavingWithError:contextInfo:)), nil)
         
     }
@@ -86,10 +71,8 @@ class ViewController: UIViewController {
         alert.addAction(action)
 
         if error != nil {
-            // Error occurred while saving the image
             print("Error: \(error!.localizedDescription)")
         } else {
-            // Image was saved successfully
             self.present(alert, animated: true, completion: nil)
         }
     }
@@ -98,25 +81,46 @@ class ViewController: UIViewController {
         let frame = CGRect(x: (screenWidth / 2) - (screenWidth / 2), y: (UIScreen.main.bounds.height / 2) - (screenWidth / 2), width: screenWidth, height: screenWidth)
         
         self.imageView.frame = frame
-//        self.imageView.image = image
         self.imageView.contentMode = .scaleAspectFit
         
         self.view.addSubview(imageView)
     }
-    //선택된 svg 이미지를 사진앱에서 선택된 이미지 가운데에 올리는 로직
+    //선택된 svg 이미지를 사진앱에서 선택된 이미지 가운데에 합성하는 로직
     func showSelectedSVG(image: UIImage){
+        //svg이미지 사이즈 조정을 위한 이미지뷰
+        let svgImage = UIImageView()
         
-        let imageViewBount = imageView.bounds
         svgImage.image = image
-        svgImage.frame = CGRect(x: (Int(imageViewBount.width) / 2) - 35, y: (Int(imageViewBount.height) / 2) - 35, width: 70, height: 70)
-        imageView.addSubview(svgImage)
+        svgImage.frame.size = CGSize(width: 70, height: 70)
+        svgImage.contentMode = .scaleAspectFit
+        
+        guard let albumImg = self.imageView.image,
+              let svgImg = self.svgImage.image else{
+            return
+        }
+        
+        //이미지를 합성할때 메모리 이슈가 있어서 scale 수정
+        UIGraphicsBeginImageContextWithOptions(albumImg.size, false, 0.0)
+
+        albumImg.draw(in: CGRect(origin: CGPoint.zero, size: albumImg.size))
+        
+        let centerX = (albumImg.size.width - svgImg.size.width) / 2.0
+        let centerY = (albumImg.size.height - svgImg.size.height) / 2.0
+
+        svgImg.draw(at: CGPoint(x: centerX, y: centerY))
+        
+        let mergedImage = UIGraphicsGetImageFromCurrentImageContext()
+
+        UIGraphicsEndImageContext()
+    
+        imageView.image = mergedImage
         
     }
     // 사진앱에서 추가될 이미지 입히기
     func showSelectedImage(image: UIImage){
         self.imageView.image = image
     }
-    //scrollview를 추가해줌
+    //scrollview를 추가해주고 constraint 지정
     func addScrollViewForSVG(){
         self.view.addSubview(svgScrollView)
         
