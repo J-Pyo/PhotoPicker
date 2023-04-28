@@ -51,6 +51,7 @@ class ViewController: UIViewController {
     //이미지 저장하기
     @objc func savingImage(){
         loadingIndicator.center = view.center
+        loadingIndicator.color = .orange
         view.addSubview(loadingIndicator)
         
         loadingIndicator.startAnimating()
@@ -100,7 +101,7 @@ class ViewController: UIViewController {
         }
         
         //이미지를 합성할때 메모리 이슈가 있어서 scale 수정
-        UIGraphicsBeginImageContextWithOptions(albumImg.size, false, 0.0)
+        UIGraphicsBeginImageContextWithOptions(albumImg.size, false, 1.0)
 
         albumImg.draw(in: CGRect(origin: CGPoint.zero, size: albumImg.size))
         
@@ -142,7 +143,7 @@ class ViewController: UIViewController {
 extension ViewController: PhotoPickerViewControllerDelegate{
     func didUpdateState(to state: PhotoPickerViewControllerState) {
         switch state {
-        case .getAsset:
+        case .getImage:
             print("get Asset")
             guard let image = popupPhotoPicker.selectedImage else{
                 return
