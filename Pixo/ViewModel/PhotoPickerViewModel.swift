@@ -34,13 +34,15 @@ class PhotoPickerViewModel{
         }
     }
     let imageManager = PHImageManager()
-    
+    //모든 사진의 Asset을 가져옴
     func fetchAllPhotos(){
         let options = PHFetchOptions()
+        //최신순
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         
         self.allPhoto = PHAsset.fetchAssets(with: options)
     }
+    //사진을 선택했을 경우 이미지를 꺼내옴
     func selectAsset(selectedAsset: PHAsset) {
         let options = PHImageRequestOptions()
         options.isSynchronous = false

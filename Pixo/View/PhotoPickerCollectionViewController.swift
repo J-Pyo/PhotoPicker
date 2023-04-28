@@ -12,14 +12,14 @@ protocol PhotoPickerViewControllerDelegate: AnyObject{
     func didUpdateState(to state: PhotoPickerViewControllerState)
 }
 enum PhotoPickerViewControllerState{
-    //선택된 Asset 가져오기
-    case getAsset
+    //선택된 Image 가져오기
+    case getImage
     //Error
     case error(reason: String)
 }
 
 class PhotoPickerCollectionViewController: UICollectionViewController {
-    
+    //CollectionView Layout
     let layout = UICollectionViewFlowLayout()
     
     let viewModel = PhotoPickerViewModel()
@@ -37,7 +37,7 @@ class PhotoPickerCollectionViewController: UICollectionViewController {
             dismiss(animated: true) {
                 //사진앱 변화 감지를 안해도 되서 등록 해제
                 PHPhotoLibrary.shared().unregisterChangeObserver(self)
-                self.delegate?.didUpdateState(to: .getAsset)
+                self.delegate?.didUpdateState(to: .getImage)
             }
         }
     }
@@ -71,7 +71,6 @@ class PhotoPickerCollectionViewController: UICollectionViewController {
         // Register cell class
         self.collectionView?.register(PhotoPickerCollectionViewCell.self, forCellWithReuseIdentifier: "PhotoCell")
     }
-    
     // Cell 사이즈 구하기 = (화면크기 - (여백좌우 + (cell간격 * 간격 갯수))) / 열 갯수
     func calcCellSize() -> Int{
         let cellSize = (Int(deviceScreenWidth) - Int(self.sectionInsets.left + self.sectionInsets.right + (cellSpacing * CGFloat((columnCount - 1))))) / columnCount
@@ -85,13 +84,11 @@ class PhotoPickerCollectionViewController: UICollectionViewController {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
-
-
+    //셀 갯수
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print(viewModel.allPhoto?.count ?? 0)
         return viewModel.allPhoto?.count ?? 0
     }
-
+    //셀을 indexpath에 맞게 반환함
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let imageManager = viewModel.imageManager
@@ -124,7 +121,7 @@ class PhotoPickerCollectionViewController: UICollectionViewController {
     }
 
 }
-
+//PhotoPickerViewModel에 관한 Delegate
 extension PhotoPickerCollectionViewController: PhotoPickerViewModelDelegate{
     func didUpdateState(to state: PhotoPickerViewModelState) {
         switch state {
@@ -141,6 +138,7 @@ extension PhotoPickerCollectionViewController: PhotoPickerViewModelDelegate{
     }
 }
 extension PhotoPickerCollectionViewController: PHPhotoLibraryChangeObserver{
+    //사진앱에 변화가 생겼을 경우 실행됨
     func photoLibraryDidChange(_ changeInstance: PHChange) {
         viewModel.fetchAllPhotos()
     }

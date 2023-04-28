@@ -16,6 +16,7 @@ enum SVGScrollViewState{
     case error(reason: String)
 }
 class SVGScrollView: UIScrollView {
+    // svg 이미지 이름 리스트
     var svgImageName = ["001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014"]
     //이미지를 담을 View
     lazy var stackView: UIStackView = {
@@ -46,15 +47,13 @@ class SVGScrollView: UIScrollView {
         
         for name in svgImageName {
             //stackView 이미지를 표현할 이미지뷰
-            var imageView = UIImageView()
+            let imageView = UIImageView()
             imageView.image = UIImage(named: name)
             imageView.translatesAutoresizingMaskIntoConstraints = true
             imageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
             imageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
             imageView.contentMode = .scaleAspectFit
             
-            
-            imageView.tag = 1
             //클릭 가능하도록 설정
             imageView.isUserInteractionEnabled = true
             //제쳐스 추가

@@ -29,7 +29,6 @@
 		02CF21FB29F640DC00EC229E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 02CF21F929F640DC00EC229E /* Main.storyboard */; };
 		02CF21FD29F640DF00EC229E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02CF21FC29F640DF00EC229E /* Assets.xcassets */; };
 		02CF220029F640DF00EC229E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 02CF21FE29F640DF00EC229E /* LaunchScreen.storyboard */; };
-		02CF220B29F6433B00EC229E /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 02CF220A29F6433B00EC229E /* SnapKit */; };
 		02CF220D29F6443D00EC229E /* PhotoPickerCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02CF220C29F6443D00EC229E /* PhotoPickerCollectionViewController.swift */; };
 		02CF221129F7E9A400EC229E /* PhotoPickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02CF221029F7E9A300EC229E /* PhotoPickerCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -68,7 +67,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				02CF220B29F6433B00EC229E /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -172,7 +170,6 @@
 			);
 			name = Pixo;
 			packageProductDependencies = (
-				02CF220A29F6433B00EC229E /* SnapKit */,
 			);
 			productName = Pixo;
 			productReference = 02CF21F029F640DC00EC229E /* Pixo.app */;
@@ -203,7 +200,6 @@
 			);
 			mainGroup = 02CF21E729F640DC00EC229E;
 			packageReferences = (
-				02CF220929F6433B00EC229E /* XCRemoteSwiftPackageReference "SnapKit" */,
 			);
 			productRefGroup = 02CF21F129F640DC00EC229E /* Products */;
 			projectDirPath = "";
@@ -472,25 +468,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		02CF220929F6433B00EC229E /* XCRemoteSwiftPackageReference "SnapKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
-			requirement = {
-				branch = develop;
-				kind = branch;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		02CF220A29F6433B00EC229E /* SnapKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 02CF220929F6433B00EC229E /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = SnapKit;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 02CF21E829F640DC00EC229E /* Project object */;
 }
