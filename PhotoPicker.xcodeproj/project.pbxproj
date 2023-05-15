@@ -50,7 +50,7 @@
 		0292964D29F805280037036D /* 003.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = 003.svg; sourceTree = "<group>"; };
 		0292965C29F808930037036D /* PhotoPickerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerViewModel.swift; sourceTree = "<group>"; };
 		0292965E29F91ABA0037036D /* SVGScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SVGScrollView.swift; sourceTree = "<group>"; };
-		02CF21F029F640DC00EC229E /* Pixo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pixo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		02CF21F029F640DC00EC229E /* PhotoPicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoPicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02CF21F329F640DC00EC229E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		02CF21F529F640DC00EC229E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		02CF21F729F640DC00EC229E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -104,7 +104,7 @@
 		02CF21E729F640DC00EC229E = {
 			isa = PBXGroup;
 			children = (
-				02CF21F229F640DC00EC229E /* Pixo */,
+				02CF21F229F640DC00EC229E /* PhotoPicker */,
 				02CF21F129F640DC00EC229E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -112,12 +112,12 @@
 		02CF21F129F640DC00EC229E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				02CF21F029F640DC00EC229E /* Pixo.app */,
+				02CF21F029F640DC00EC229E /* PhotoPicker.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		02CF21F229F640DC00EC229E /* Pixo */ = {
+		02CF21F229F640DC00EC229E /* PhotoPicker */ = {
 			isa = PBXGroup;
 			children = (
 				0292963F29F805020037036D /* Images */,
@@ -132,7 +132,7 @@
 				02CF21FE29F640DF00EC229E /* LaunchScreen.storyboard */,
 				02CF220129F640DF00EC229E /* Info.plist */,
 			);
-			path = Pixo;
+			path = PhotoPicker;
 			sourceTree = "<group>";
 		};
 		02CF220729F642D200EC229E /* View */ = {
@@ -156,9 +156,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		02CF21EF29F640DC00EC229E /* Pixo */ = {
+		02CF21EF29F640DC00EC229E /* PhotoPicker */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 02CF220429F640DF00EC229E /* Build configuration list for PBXNativeTarget "Pixo" */;
+			buildConfigurationList = 02CF220429F640DF00EC229E /* Build configuration list for PBXNativeTarget "PhotoPicker" */;
 			buildPhases = (
 				02CF21EC29F640DC00EC229E /* Sources */,
 				02CF21ED29F640DC00EC229E /* Frameworks */,
@@ -168,11 +168,11 @@
 			);
 			dependencies = (
 			);
-			name = Pixo;
+			name = PhotoPicker;
 			packageProductDependencies = (
 			);
 			productName = Pixo;
-			productReference = 02CF21F029F640DC00EC229E /* Pixo.app */;
+			productReference = 02CF21F029F640DC00EC229E /* PhotoPicker.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -190,7 +190,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 02CF21EB29F640DC00EC229E /* Build configuration list for PBXProject "Pixo" */;
+			buildConfigurationList = 02CF21EB29F640DC00EC229E /* Build configuration list for PBXProject "PhotoPicker" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -205,7 +205,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				02CF21EF29F640DC00EC229E /* Pixo */,
+				02CF21EF29F640DC00EC229E /* PhotoPicker */,
 			);
 		};
 /* End PBXProject section */
@@ -397,7 +397,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6ACX2ZPG9J;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Pixo/Info.plist;
+				INFOPLIST_FILE = PhotoPicker/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -409,7 +409,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.hjp.Pixo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hjp.PhotoPicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -426,7 +426,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6ACX2ZPG9J;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Pixo/Info.plist;
+				INFOPLIST_FILE = PhotoPicker/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -438,7 +438,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.hjp.Pixo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hjp.PhotoPicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -449,7 +449,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		02CF21EB29F640DC00EC229E /* Build configuration list for PBXProject "Pixo" */ = {
+		02CF21EB29F640DC00EC229E /* Build configuration list for PBXProject "PhotoPicker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				02CF220229F640DF00EC229E /* Debug */,
@@ -458,7 +458,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		02CF220429F640DF00EC229E /* Build configuration list for PBXNativeTarget "Pixo" */ = {
+		02CF220429F640DF00EC229E /* Build configuration list for PBXNativeTarget "PhotoPicker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				02CF220529F640DF00EC229E /* Debug */,

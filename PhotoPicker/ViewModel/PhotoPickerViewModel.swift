@@ -1,6 +1,6 @@
 //
 //  PhotoPickerViewModel.swift
-//  Pixo
+//  PhotoPicker
 //
 //  Created by 홍정표 on 2023/04/25.
 //
